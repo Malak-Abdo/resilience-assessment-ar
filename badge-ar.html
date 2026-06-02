@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <title>شهادة إتمام الكورس · حزمة أدوات المرونة</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+            background: #1a2a2e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+        .share-wrapper {
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        /* Clean Minimal Share Card */
+        .share-card {
+            background: linear-gradient(135deg, #1A6B5A 0%, #0e4d40 100%);
+            border-radius: 32px;
+            padding: 2.5rem 2rem;
+            color: white;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .share-card::before {
+            content: "✨";
+            font-size: 8rem;
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+        /* ===== HUMANITARIAN VALLEY LOGO ===== */
+        .hv-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .hv-logo-icon {
+            font-size: 1.5rem;
+            background: rgba(255,255,255,0.15);
+            padding: 0.3rem 0.6rem;
+            border-radius: 60px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .hv-logo-text {
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #E8A735;
+        }
+        .hv-logo-sub {
+            font-size: 0.65rem;
+            opacity: 0.8;
+            letter-spacing: 0.5px;
+        }
+        .hv-divider {
+            width: 40px;
+            height: 2px;
+            background: rgba(255,255,255,0.2);
+            margin: 0.5rem auto;
+        }
+        .badge-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        .course-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+        .graduate-name {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #E8A735;
+            margin: 0.5rem 0;
+            word-break: break-word;
+        }
+        .achievement-text {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin: 1rem 0;
+            line-height: 1.4;
+        }
+        .date-text {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 1.5rem;
+        }
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+        button {
+            background: #0077B5;
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.8rem 1.8rem;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.15s;
+            font-family: inherit;
+        }
+        button:hover {
+            background: #005e8c;
+            transform: translateY(-2px);
+        }
+        .btn-linkedin {
+            background: #0077B5;
+        }
+        .btn-copy {
+            background: #E8A735;
+            color: #2E3A2A;
+        }
+        .btn-copy:hover {
+            background: #d4951e;
+        }
+        .toast-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1A6B5A;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            z-index: 1000;
+            animation: fadeInUp 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            font-family: system-ui, sans-serif;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        @media (max-width: 550px) {
+            .share-card {
+                padding: 1.5rem;
+            }
+            .graduate-name {
+                font-size: 1.8rem;
+            }
+            .course-title {
+                font-size: 1rem;
+            }
+            .btn-group button {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.8rem;
+            }
+            .hv-logo-icon {
+                font-size: 1.2rem;
+                padding: 0.2rem 0.5rem;
+            }
+            .hv-logo-text {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="share-wrapper">
+    <!-- Clean Minimal Share Card -->
+    <div class="share-card" id="shareCard">
+        
+        <!-- ===== شعار وادي العمل الإنساني ===== -->
+        <div class="hv-logo">
+            <div class="hv-logo-icon">
+                <span>🏔️</span>
+                <span>🤝</span>
+            </div>
+            <div>
+                <div class="hv-logo-text">وادي العمل الإنساني</div>
+                <div class="hv-logo-sub">HV · المرونة للقادة في الأزمات</div>
+            </div>
+        </div>
+        <div class="hv-divider"></div>
+        
+        <div class="badge-icon">🏅</div>
+        <div class="course-title">حزمة أدوات المرونة</div>
+        <div class="graduate-name" id="graduateName">جار التحميل...</div>
+        <div class="achievement-text">
+            أكمل بنجاح برنامج<br>
+            القيادة في مناطق النزاع
+        </div>
+        <div class="date-text" id="completionDate">تاريخ الإكمال: جار التحميل...</div>
+    </div>
+
+    <!-- Buttons below the card -->
+    <div class="btn-group">
+        <button id="shareLinkedInBtn" class="btn-linkedin">🔗 مشاركة على LinkedIn</button>
+        <button id="copyCardBtn">🖼️ نسخ البطاقة كصورة</button>
+    </div>
+</div>
+
+<script>
+// ============================================
+// GOOGLE SHEETS WEB APP URL
+// ============================================
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzh2mNl4kVtX0RB5mzsrg0nw_-GW9HTeMk08Ii0HF3UI7QUZ4wcxK6Ej9zvDvLn5uhDFw/exec';
+
+// ============================================
+// ============================================
+// جلب بيانات المستخدم من رابط URL أو localStorage
+// ============================================
+function getUserData() {
+    let name = '', email = '', position = '';
+    
+    // أولاً: محاولة قراءة البيانات من رابط URL
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    if (urlParams.has('name')) {
+        name = decodeURIComponent(urlParams.get('name'));
+        email = decodeURIComponent(urlParams.get('email') || '');
+        position = decodeURIComponent(urlParams.get('position') || '');
+        
+        // حفظ البيانات في localStorage للاستخدام لاحقاً (اختياري)
+        if (name && name !== '') {
+            localStorage.setItem('course_user_name', name);
+            localStorage.setItem('course_user_email', email);
+            localStorage.setItem('course_user_position', position);
+        }
+    }
+    
+    // إذا لم توجد بيانات في الرابط، حاول من localStorage
+    if (!name || name === '') {
+        let n = localStorage.getItem('course_user_name');
+        if (n && n !== 'null' && n !== 'undefined' && n !== 'Guest' && n.trim() !== '') {
+            name = n.trim();
+            email = (localStorage.getItem('course_user_email') || '').trim();
+            position = (localStorage.getItem('course_user_position') || '').trim();
+        }
+    }
+    
+    // إذا لم توجد أي بيانات، استخدم القيم الافتراضية
+    if (!name || name === '') {
+        name = 'متعلم';
+    }
+    
+    return { name: name, email: email || 'غير متوفر', position: position || 'غير محدد' };
+}
+
+// ============================================
+// SEND BADGE DATA TO GOOGLE SHEETS
+// ============================================
+function sendBadgeDataToSheet() {
+    const userData = getUserData();
+    const today = new Date();
+    
+    const payload = {
+        module: 'Course Completion Badge',
+        action: 'badge_issued',
+        language: 'ar',
+        userName: userData.name,
+        userEmail: userData.email,
+        userPosition: userData.position,
+        timestamp: today.toISOString(),
+        completionDate: today.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' }),
+        badgeType: 'برنامج القيادة في مناطق النزاع',
+        status: 'Completed'
+    };
+    
+    console.log('📤 جاري إرسال بيانات الشهادة إلى Google Sheets:', payload);
+    
+    return new Promise((resolve) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', GOOGLE_SCRIPT_URL, true);
+        xhr.setRequestHeader('Content-Type', 'text/plain;charset=utf-8');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    console.log('✅ تم إرسال بيانات الشهادة بنجاح');
+                    resolve(true);
+                } else {
+                    console.log('⚠️ قد لا تكون بيانات الشهادة قد حفظت');
+                    resolve(true);
+                }
+            }
+        };
+        xhr.send(JSON.stringify(payload));
+        setTimeout(() => resolve(true), 1000);
+    });
+}
+
+// ============================================
+// CHECK IF BADGE ALREADY RECORDED
+// ============================================
+function isBadgeAlreadyRecorded() {
+    return localStorage.getItem('badge_recorded_ar') === 'true';
+}
+
+function markBadgeAsRecorded() {
+    localStorage.setItem('badge_recorded_ar', 'true');
+}
+
+// ============================================
+// UPDATE UI WITH USER DATA
+// ============================================
+function updateUI() {
+    const currentUser = getUserData();
+    let userName = currentUser.name;
+    
+    // Capitalize first letter if needed
+    if (userName && userName.length > 0 && userName !== 'زائر') {
+        userName = userName.charAt(0).toUpperCase() + userName.slice(1);
+    } else if (userName === 'زائر') {
+        userName = 'قائد إنساني';
+    }
+    
+    const graduateNameSpan = document.getElementById('graduateName');
+    if (graduateNameSpan) graduateNameSpan.innerText = userName;
+    
+    const completionDateSpan = document.getElementById('completionDate');
+    const today = new Date();
+    const dateString = today.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+    if (completionDateSpan) completionDateSpan.innerText = `تاريخ الإكمال: ${dateString}`;
+}
+
+// ============================================
+// RECORD BADGE ON PAGE LOAD (ONLY ONCE - SILENT)
+// ============================================
+async function recordBadge() {
+    // Check if badge already recorded
+    if (isBadgeAlreadyRecorded()) {
+        console.log('تم تسجيل الشهادة مسبقاً لهذا المستخدم');
+        return;
+    }
+    
+    // Send data to Google Sheets
+    const result = await sendBadgeDataToSheet();
+    
+    if (result) {
+        markBadgeAsRecorded();
+        console.log('✅ تم تسجيل الشهادة للمستخدم:', getUserData().name);
+    }
+}
+
+// ============================================
+// GENERATE LINKEDIN POST TEXT (ARABIC)
+// ============================================
+function generateCleanLinkedInPost() {
+    const currentUser = getUserData();
+    let userName = currentUser.name;
+    if (userName && userName.length > 0 && userName !== 'زائر') {
+        userName = userName.charAt(0).toUpperCase() + userName.slice(1);
+    } else {
+        userName = 'قائد إنساني';
+    }
+    const today = new Date();
+    const dateString = today.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+    
+    return `🏅
+
+حزمة أدوات المرونة
+
+${userName}
+
+أكمل بنجاح برنامج
+
+القيادة في مناطق النزاع
+
+تاريخ الإكمال: ${dateString}`;
+}
+
+// ============================================
+// SHARE ON LINKEDIN
+// ============================================
+function shareOnLinkedIn() {
+    const shareText = generateCleanLinkedInPost();
+    const encodedText = encodeURIComponent(shareText);
+    const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?summary=${encodedText}`;
+    
+    window.open(linkedInUrl, '_blank', 'width=600,height=500');
+    showToast('📢 جاري فتح LinkedIn لمشاركة إنجازك...');
+}
+
+// ============================================
+// COPY CARD AS IMAGE
+// ============================================
+async function copyCardAsImage() {
+    const shareCard = document.getElementById('shareCard');
+    const originalWidth = shareCard.style.width;
+    shareCard.style.width = '500px';
+    
+    if (typeof html2canvas === 'undefined') {
+        await loadHtml2Canvas();
+    }
+    
+    try {
+        const canvas = await html2canvas(shareCard, {
+            scale: 2,
+            backgroundColor: null,
+            logging: false
+        });
+        
+        canvas.toBlob(async (blob) => {
+            try {
+                await navigator.clipboard.write([
+                    new ClipboardItem({
+                        [blob.type]: blob
+                    })
+                ]);
+                showToast('🖼️ تم نسخ بطاقة الشهادة! يمكنك لصقها على LinkedIn.');
+            } catch (err) {
+                showToast('⚠️ تعذر نسخ الصورة. حاول التحميل بدلاً من ذلك.', true);
+                downloadCardAsImage();
+            }
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('⚠️ تعذر نسخ الصورة. حاول التحميل بدلاً من ذلك.', true);
+        downloadCardAsImage();
+    }
+    
+    shareCard.style.width = originalWidth;
+}
+
+// ============================================
+// DOWNLOAD CARD AS IMAGE
+// ============================================
+async function downloadCardAsImage() {
+    const shareCard = document.getElementById('shareCard');
+    const originalWidth = shareCard.style.width;
+    shareCard.style.width = '500px';
+    
+    if (typeof html2canvas === 'undefined') {
+        await loadHtml2Canvas();
+    }
+    
+    try {
+        const canvas = await html2canvas(shareCard, {
+            scale: 2,
+            backgroundColor: null,
+            logging: false
+        });
+        
+        const link = document.createElement('a');
+        const currentUser = getUserData();
+        let userName = currentUser.name !== 'زائر' ? currentUser.name.replace(/\s/g, '_') : 'Leader';
+        link.download = `شهادة_المرونة_${userName}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+        
+        showToast('✅ تم تحميل الشهادة بصيغة PNG!');
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('⚠️ تعذر تحميل الصورة.', true);
+    }
+    
+    shareCard.style.width = originalWidth;
+}
+
+// ============================================
+// LOAD HTML2CANVAS
+// ============================================
+function loadHtml2Canvas() {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+    });
+}
+
+// ============================================
+// SHOW TOAST MESSAGE
+// ============================================
+function showToast(message, isError = false) {
+    const existing = document.querySelector('.toast-message');
+    if (existing) existing.remove();
+    const toast = document.createElement('div');
+    toast.className = 'toast-message';
+    toast.style.background = isError ? '#B33A3A' : '#1A6B5A';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+// ============================================
+// EVENT LISTENERS
+// ============================================
+document.getElementById('shareLinkedInBtn')?.addEventListener('click', shareOnLinkedIn);
+document.getElementById('copyCardBtn')?.addEventListener('click', copyCardAsImage);
+
+// ============================================
+// INITIALIZE
+// ============================================
+updateUI();
+recordBadge();
+</script>
+</body>
+</html>
