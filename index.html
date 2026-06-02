@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <title>حزمة أدوات المرونة · تقييم ما بعد الدورة</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+            background: #F4F7FC;
+            color: #1E2F3E;
+            line-height: 1.45;
+            padding: 0 0 2rem 0;
+        }
+        .course-card {
+            max-width: 680px;
+            margin: 1rem auto;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.02);
+            overflow: hidden;
+            padding: 1.8rem 1.5rem 2.2rem;
+        }
+        @media (max-width: 550px) {
+            .course-card {
+                margin: 0.8rem;
+                padding: 1.5rem 1.2rem;
+                border-radius: 28px;
+            }
+        }
+        .header-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #1A6B5A;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .user-badge {
+            font-size: 0.7rem;
+            background: #E8F5E9;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            color: #1A6B5A;
+        }
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0C2E3B;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        .assessment-header {
+            background: #F0F7F4;
+            border-radius: 24px;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+            border-right: 4px solid #E8A735;
+            text-align: center;
+        }
+        .progress-area {
+            background: #F0F4FA;
+            border-radius: 60px;
+            padding: 0.2rem;
+            margin: 1rem 0 1.5rem;
+        }
+        .progress-bar-fill {
+            background: #1A6B5A;
+            height: 6px;
+            width: 0%;
+            border-radius: 60px;
+            transition: width 0.2s ease;
+        }
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: #4F6F8F;
+            margin-top: 0.3rem;
+        }
+        .question {
+            background: #FEFEFE;
+            border: 1px solid #E2E9F2;
+            border-radius: 24px;
+            padding: 1.2rem 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .scale-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .scale-item {
+            flex: 1;
+            min-width: 60px;
+            text-align: center;
+            background: #F1F5F9;
+            padding: 0.5rem 0;
+            border-radius: 48px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            border: 1px solid transparent;
+            transition: 0.1s;
+        }
+        .scale-item:hover {
+            background: #E3ECF3;
+        }
+        .scale-item.selected {
+            background: #1A6B5A;
+            color: white;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            gap: 1rem;
+        }
+        button {
+            background: #1A6B5A;
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.7rem 1.5rem;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        button:hover {
+            background: #0e4d40;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .secondary {
+            background: #E8A735;
+            color: #2E3A2A;
+        }
+        .secondary:hover {
+            background: #d4951e;
+        }
+        .results-box {
+            background: #F0F7F4;
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            text-align: center;
+        }
+        .congrats-message {
+            background: linear-gradient(135deg, #E8A735 0%, #D4951E 100%);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: none;
+            color: white;
+        }
+        .congrats-message h3 {
+            color: white;
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+        }
+        .congrats-message p {
+            color: #FFF8E7;
+            font-weight: 500;
+        }
+        .tools-list {
+            background: white;
+            border-radius: 16px;
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: right;
+            color: #1E2F3E;
+        }
+        .tools-list ul {
+            margin-right: 1.5rem;
+            line-height: 1.8;
+        }
+        .footer-note {
+            font-size: 0.7rem;
+            text-align: center;
+            color: #8BA0B8;
+            margin-top: 1.5rem;
+        }
+        textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 16px;
+            border: 1px solid #ccc;
+            font-family: inherit;
+            margin-top: 0.5rem;
+            resize: vertical;
+            font-size: 0.9rem;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #1A6B5A;
+        }
+        .hidden {
+            display: none;
+        }
+        .toast-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1A6B5A;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            z-index: 1000;
+            animation: fadeInUp 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .toast-message.error {
+            background: #B33A3A;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        .badge-btn {
+            background: linear-gradient(135deg, #E8A735 0%, #D4951E 100%);
+            color: #2E3A2A;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 0.8rem 1.8rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="course-card">
+    <div class="header-tag">
+        <span>حزمة أدوات المرونة</span>
+        <span class="user-badge" id="userBadge">👤 جار التحميل...</span>
+    </div>
+    <h1>📋 تقييم ما بعد الدورة</h1>
+    <div class="assessment-header">
+        <p style="margin-bottom: 0.5rem;"><strong>⏱️ ٣ دقائق · لا توجد إجابات خاطئة</strong></p>
+        <p>شكراً لإتمامك دورة حزمة أدوات المرونة. الرجاء الإجابة على هذه الأسئلة الستة بصدق. ملاحظاتك تساعدنا على التحسين.</p>
+    </div>
+
+    <div class="progress-area">
+        <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-stats">
+        <span id="progressText">٠/٦ أسئلة</span>
+    </div>
+
+    <div id="questionsContainer"></div>
+
+    <div class="nav-buttons">
+        <button id="prevBtn" class="secondary" disabled>← السابق</button>
+        <button id="nextBtn" disabled>التالي →</button>
+    </div>
+
+    <div id="resultsArea" class="hidden"></div>
+    <div id="sendSection" class="hidden" style="text-align: center; margin-top: 1.5rem;">
+        <button id="sendResultsBtn" class="badge-btn">🎓 احصل على شارة الإكمال</button>
+        <div id="sendFeedback" style="margin-top: 0.5rem; font-size: 0.85rem;"></div>
+    </div>
+
+    <div class="footer-note">ملاحظاتك تساعدنا على تحسين هذه الدورة للقادة حول العالم.</div>
+</div>
+
+<script>
+// ============================================
+// GOOGLE SHEETS WEB APP URL - UPDATE THIS AFTER DEPLOY
+// ============================================
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxx9_LF2KsYnDzzISw36YXmoIYByfLtmasEkBRNDjDED9n2dI9RnbukJhX7EMBPaFcHLA/exec';
+
+// ============================================
+// ============================================
+// جلب بيانات المستخدم من رابط URL أو localStorage
+// ============================================
+function getUserData() {
+    let name = '', email = '', position = '';
+    
+    // أولاً: محاولة قراءة البيانات من رابط URL
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    if (urlParams.has('name')) {
+        name = decodeURIComponent(urlParams.get('name'));
+        email = decodeURIComponent(urlParams.get('email') || '');
+        position = decodeURIComponent(urlParams.get('position') || '');
+        
+        // حفظ البيانات في localStorage للاستخدام لاحقاً (اختياري)
+        if (name && name !== '') {
+            localStorage.setItem('course_user_name', name);
+            localStorage.setItem('course_user_email', email);
+            localStorage.setItem('course_user_position', position);
+        }
+    }
+    
+    // إذا لم توجد بيانات في الرابط، حاول من localStorage
+    if (!name || name === '') {
+        let n = localStorage.getItem('course_user_name');
+        if (n && n !== 'null' && n !== 'undefined' && n !== 'Guest' && n.trim() !== '') {
+            name = n.trim();
+            email = (localStorage.getItem('course_user_email') || '').trim();
+            position = (localStorage.getItem('course_user_position') || '').trim();
+        }
+    }
+    
+    // إذا لم توجد أي بيانات، استخدم القيم الافتراضية
+    if (!name || name === '') {
+        name = 'متعلم';
+    }
+    
+    return { name: name, email: email || 'غير متوفر', position: position || 'غير محدد' };
+}
+const currentUser = getUserData();
+const userBadge = document.getElementById('userBadge');
+if (userBadge) {
+    userBadge.innerText = currentUser.name !== 'زائر' ? `👤 ${currentUser.name}` : `👤 متعلم`;
+}
+
+function showToast(message, isError = false) {
+    const existing = document.querySelector('.toast-message');
+    if (existing) existing.remove();
+    const toast = document.createElement('div');
+    toast.className = 'toast-message' + (isError ? ' error' : '');
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+// ============================================
+// SEND DATA TO GOOGLE SHEETS
+// ============================================
+async function sendToGoogleSheet(answersData) {
+    var user = getUserData();
+    
+    var payload = {
+        module: 'Post Assessment',
+        action: 'completed',
+        language: 'ar',
+        userName: user.name,
+        userEmail: user.email,
+        userPosition: user.position,
+        timestamp: new Date().toISOString(),
+        answers: answersData
+    };
+    
+    console.log('📤 جاري إرسال البيانات:', payload);
+    
+    try {
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'text/plain;charset=utf-8',
+            },
+            body: JSON.stringify(payload)
+        });
+        
+        const result = await response.json();
+        console.log('✅ الرد:', result);
+        return result.success === true;
+    } catch (error) {
+        console.log('⚠️ خطأ:', error);
+        return true;
+    }
+}
+
+// ============================================
+// ASSESSMENT QUESTIONS - ARABIC
+// ============================================
+const assessmentQuestions = [
+    {
+        id: 1,
+        text: "هل تشعر بالثقة في قدرتك على استخدام إطار S.A.F.E. في أزمة مستقبلية؟",
+        type: "scale",
+        min: 1,
+        max: 5,
+        labels: ["غير واثق إطلاقاً", "واثق قليلاً", "واثق بشكل معتدل", "واثق", "واثق جداً"]
+    },
+    {
+        id: 2,
+        text: "هل تعتقد أن رد فعلك الأول تجاه الأزمات سيتغير بعد هذه الدورة؟",
+        type: "scale",
+        min: 1,
+        max: 5,
+        labels: ["لا أوافق بشدة", "لا أوافق", "محايد", "أوافق", "أوافق بشدة"]
+    },
+    {
+        id: 3,
+        text: "مقارنة بما قبل هذه الدورة، ما مدى ثقتك في قيادة فريقك خلال أزمة غير متوقعة؟",
+        type: "scale",
+        min: 1,
+        max: 5,
+        labels: ["أقل ثقة بكثير", "أقل ثقة قليلاً", "لا تغيير", "أكثر ثقة قليلاً", "أكثر ثقة بكثير"]
+    },
+    {
+        id: 4,
+        text: "ما هو أكثر شيء قيم تعلمته من هذه الدورة؟",
+        type: "text",
+        placeholder: "مثال: إطار S.A.F.E. سيساعدني على التوقف قبل الرد..."
+    },
+    {
+        id: 5,
+        text: "ما مدى احتمالية استخدامك لأداة واحدة على الأقل من هذه الدورة في الثلاثين يوماً القادمة؟",
+        type: "scale",
+        min: 1,
+        max: 5,
+        labels: ["غير محتمل إطلاقاً", "غير محتمل", "محايد", "محتمل", "محتمل جداً"]
+    },
+    {
+        id: 6,
+        text: "بشكل عام، كيف تقيم هذه الدورة؟",
+        type: "scale",
+        min: 1,
+        max: 5,
+        labels: ["ضعيفة", "مقبولة", "جيدة", "جيدة جداً", "ممتازة"]
+    }
+];
+
+let answers = {};
+let currentIndex = 0;
+
+for (let i = 1; i <= assessmentQuestions.length; i++) {
+    const q = assessmentQuestions[i-1];
+    answers[i] = q.type === 'text' ? '' : (q.type === 'multi' ? [] : null);
+}
+
+const container = document.getElementById('questionsContainer');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const progressFill = document.getElementById('progressFill');
+const progressText = document.getElementById('progressText');
+const resultsArea = document.getElementById('resultsArea');
+const sendSection = document.getElementById('sendSection');
+
+function updateProgress() {
+    let answered = 0;
+    for (let i = 1; i <= assessmentQuestions.length; i++) {
+        const q = assessmentQuestions[i-1];
+        if (q.type === 'multi') {
+            if (answers[i] && answers[i].length > 0) answered++;
+        } else if (q.type === 'text') {
+            if (answers[i] && answers[i].trim() !== '') answered++;
+        } else {
+            if (answers[i] !== null && answers[i] !== '') answered++;
+        }
+    }
+    const percent = (answered / assessmentQuestions.length) * 100;
+    progressFill.style.width = percent + '%';
+    progressText.innerText = answered + '/' + assessmentQuestions.length + ' أسئلة تمت الإجابة عليها';
+    
+    const currentQ = assessmentQuestions[currentIndex];
+    let currentAnswered = false;
+    if (currentQ.type === 'multi') {
+        currentAnswered = (answers[currentIndex+1] && answers[currentIndex+1].length > 0);
+    } else if (currentQ.type === 'text') {
+        currentAnswered = (answers[currentIndex+1] && answers[currentIndex+1].trim() !== '');
+    } else {
+        currentAnswered = (answers[currentIndex+1] !== null && answers[currentIndex+1] !== '');
+    }
+    nextBtn.disabled = !currentAnswered;
+    return answered;
+}
+
+function renderQuestion() {
+    const q = assessmentQuestions[currentIndex];
+    if (!q) return;
+    
+    let html = `<div class="question">
+        <p style="font-weight: 700; margin-bottom: 0.5rem;">السؤال ${currentIndex+1} من ${assessmentQuestions.length}</p>
+        <p style="margin-bottom: 1rem;">${q.text}</p>`;
+    
+    if (q.type === 'scale') {
+        html += `<div class="scale-row">`;
+        for (let i = q.min; i <= q.max; i++) {
+            const isSelected = (answers[currentIndex+1] === i);
+            html += `<div class="scale-item ${isSelected ? 'selected' : ''}" data-value="${i}">
+                        <strong>${i}</strong><br>
+                        <span style="font-size:0.7rem;">${q.labels[i-1]}</span>
+                    </div>`;
+        }
+        html += `</div>`;
+    } else if (q.type === 'text') {
+        html += `<textarea id="textAnswer" rows="4" placeholder="${q.placeholder}">${answers[currentIndex+1] || ''}</textarea>`;
+    }
+    
+    html += `</div>`;
+    container.innerHTML = html;
+    attachEvents();
+}
+
+function attachEvents() {
+    const q = assessmentQuestions[currentIndex];
+    
+    if (q.type === 'scale') {
+        document.querySelectorAll('.scale-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const val = parseInt(item.getAttribute('data-value'));
+                document.querySelectorAll('.scale-item').forEach(i => i.classList.remove('selected'));
+                item.classList.add('selected');
+                answers[currentIndex+1] = val;
+                updateProgress();
+            });
+        });
+    } else if (q.type === 'text') {
+        const textarea = document.getElementById('textAnswer');
+        textarea.addEventListener('input', () => {
+            answers[currentIndex+1] = textarea.value;
+            updateProgress();
+        });
+    }
+}
+
+function calculateCompletionScore() {
+    let answered = 0;
+    for (let i = 1; i <= assessmentQuestions.length; i++) {
+        const q = assessmentQuestions[i-1];
+        if (q.type === 'multi') {
+            if (answers[i] && answers[i].length > 0) answered++;
+        } else if (q.type === 'text') {
+            if (answers[i] && answers[i].trim() !== '') answered++;
+        } else {
+            if (answers[i] !== null && answers[i] !== '') answered++;
+        }
+    }
+    return Math.round((answered / assessmentQuestions.length) * 100);
+}
+
+function showResults() {
+    const completionScore = calculateCompletionScore();
+    const userName = currentUser.name !== 'زائر' ? currentUser.name : 'القائد';
+    
+    let resultsHtml = `
+        <div class="results-box">
+            <div class="congrats-message">
+                <h3>🎉 شكراً لك، ${userName}! 🎉</h3>
+                <p>لقد أكملت بنجاح تقييم ما بعد دورة حزمة أدوات المرونة.</p>
+            </div>
+            <div class="tools-list">
+                <h4>🧰 حزمة أدوات المرونة الخاصة بك جاهزة الآن</h4>
+                <ul>
+                    <li><strong>🔍 إطار S.A.F.E.</strong> — توقف وتنفس، تقييم الواقع، إيجاد أصغر إجراء ممكن، تنفيذ وتقييم</li>
+                    <li><strong>🔄 تحويل العقلية</strong> — من ضحية إلى فاعل، من ندرة إلى وفرة، من ذعر إلى فضول</li>
+                    <li><strong>🎯 نوايا التعلم مقابل أهداف الأداء</strong> — تعلم التضاريس أولاً</li>
+                    <li><strong>⚙️ العادات التنفيذية</strong> — حلقة العادة (الإشارة → الروتين → المكافأة)</li>
+                    <li><strong>⏰ بروتوكول السابعة صباحاً</strong> — نصوص معتمدة مسبقاً لحظات الأزمات</li>
+                </ul>
+            </div>
+            <div style="background: #1A6B5A20; padding: 1rem; border-radius: 16px;">
+                <strong>✅ اكتمل التقييم:</strong> ${completionScore}%
+            </div>`;
+    
+    if (answers[4] && answers[4].trim()) {
+        resultsHtml += `<div style="margin-top: 1rem; padding: 1rem; background: #F0F7F4; border-radius: 16px;">
+            <strong>💡 أكثر شيء قيم تعلمته:</strong><br>"${answers[4]}"</div>`;
+    }
+    
+    resultsHtml += `</div>`;
+    resultsArea.innerHTML = resultsHtml;
+    resultsArea.classList.remove('hidden');
+    container.classList.add('hidden');
+    prevBtn.classList.add('hidden');
+    nextBtn.classList.add('hidden');
+    sendSection.classList.remove('hidden');
+}
+
+async function sendResults() {
+    const sendBtn = document.getElementById('sendResultsBtn');
+    const feedbackDiv = document.getElementById('sendFeedback');
+    
+    let allAnswered = true;
+    for (let i = 1; i <= assessmentQuestions.length; i++) {
+        const q = assessmentQuestions[i-1];
+        if (q.type === 'multi') {
+            if (!answers[i] || answers[i].length === 0) allAnswered = false;
+        } else if (q.type === 'text') {
+            if (!answers[i] || answers[i].trim() === '') allAnswered = false;
+        } else {
+            if (answers[i] === null || answers[i] === '') allAnswered = false;
+        }
+    }
+    
+    if (!allAnswered) {
+        showToast('⚠️ الرجاء الإجابة على جميع الأسئلة قبل الإرسال.', true);
+        return;
+    }
+    
+    sendBtn.disabled = true;
+    sendBtn.innerText = '🎓 جاري الحفظ...';
+    feedbackDiv.innerHTML = '⏳ جاري إرسال تقييمك...';
+    
+    const completionScore = calculateCompletionScore();
+    
+    const answersData = {
+        q1_confidence_safe: answers[1] || '',
+        q2_reaction_change: answers[2] || '',
+        q3_confidence_team: answers[3] || '',
+        q4_most_valuable: answers[4] || '',
+        q5_likelihood_use: answers[5] || '',
+        q6_overall_rating: answers[6] || '',
+        completionScore: completionScore
+    };
+    
+    await sendToGoogleSheet(answersData);
+    
+    localStorage.setItem('post_assessment_completed', 'true');
+    localStorage.setItem('course_completed', 'true');
+    
+    // التوجيه الفوري - بدون انتظار
+    window.location.href = 'badge-ar.html';
+}
+
+function handleNext() {
+    const currentQ = assessmentQuestions[currentIndex];
+    let currentAnswered = false;
+    if (currentQ.type === 'multi') {
+        currentAnswered = (answers[currentIndex+1] && answers[currentIndex+1].length > 0);
+    } else if (currentQ.type === 'text') {
+        currentAnswered = (answers[currentIndex+1] && answers[currentIndex+1].trim() !== '');
+    } else {
+        currentAnswered = (answers[currentIndex+1] !== null && answers[currentIndex+1] !== '');
+    }
+    
+    if (!currentAnswered) {
+        showToast('⚠️ الرجاء الإجابة على السؤال الحالي.', true);
+        return;
+    }
+    
+    if (currentIndex < assessmentQuestions.length - 1) {
+        currentIndex++;
+        renderQuestion();
+        prevBtn.disabled = false;
+    } else {
+        showResults();
+    }
+}
+
+function handlePrev() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        renderQuestion();
+        if (currentIndex === 0) prevBtn.disabled = true;
+    }
+}
+
+document.getElementById('sendResultsBtn')?.addEventListener('click', sendResults);
+prevBtn.addEventListener('click', handlePrev);
+nextBtn.addEventListener('click', handleNext);
+
+renderQuestion();
+updateProgress();
+</script>
+</body>
+</html>
