@@ -316,7 +316,7 @@
 </head>
 <body>
 
-<!-- Modal for name input - same as English version -->
+<!-- نافذة إدخال الاسم والبريد الإلكتروني -->
 <div id="nameModal" class="name-modal" style="display: flex;">
     <div class="modal-content">
         <div style="font-size: 3rem;">👋🏅</div>
@@ -365,12 +365,12 @@
 
 <script>
 // ============================================
-// GOOGLE SHEETS WEB APP URL - SAME AS ENGLISH
+// GOOGLE SHEETS WEB APP URL
 // ============================================
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyHxdPxR3-9ppoWwvjtQFAP1d8TGajTaKX4aNLq4egxANVek7gIQ1HCp7_RQQIripg/exec';
 
 // ============================================
-// MODAL AND USER DATA HANDLING - SAME LOGIC AS ENGLISH
+// MODAL AND USER DATA HANDLING
 // ============================================
 
 function saveUserDataToLocalStorage(name, email, position) {
@@ -416,7 +416,7 @@ function setupModalButton() {
             updateUserBadge(name);
             hideModal();
             
-            // Start the assessment
+            // بدء التقييم
             renderQuestion();
             updateProgress();
         });
