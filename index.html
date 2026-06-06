@@ -316,7 +316,7 @@
 </head>
 <body>
 
-<!-- نافذة إدخال الاسم والبريد الإلكتروني -->
+<!-- Modal for name input - Always visible at start -->
 <div id="nameModal" class="name-modal" style="display: flex;">
     <div class="modal-content">
         <div style="font-size: 3rem;">👋🏅</div>
@@ -398,7 +398,7 @@ function updateUserBadge(name) {
     }
 }
 
-// Setup modal button
+// Setup modal button - THIS IS THE KEY FUNCTION
 function setupModalButton() {
     const startBtn = document.getElementById('startAssessmentBtn');
     if (startBtn) {
@@ -416,7 +416,7 @@ function setupModalButton() {
             updateUserBadge(name);
             hideModal();
             
-            // بدء التقييم
+            // Start the assessment
             renderQuestion();
             updateProgress();
         });
