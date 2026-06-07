@@ -675,14 +675,8 @@ nextBtn.addEventListener('click', handleNext);
 // Setup modal button
 setupModalButton();
 
-// Check if user already has data
-const existingUser = getUserDataFromLocalStorage();
-if (existingUser.name && existingUser.name !== '' && existingUser.name !== 'متعلم') {
-    hideModal();
-    updateUserBadge(existingUser.name);
-    renderQuestion();
-    updateProgress();
-}
+// NOTE: The modal is always shown at start - we do NOT auto-hide it
+// The user MUST enter their name and email before seeing the assessment
 </script>
 </body>
 </html>
