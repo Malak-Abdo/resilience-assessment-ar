@@ -84,10 +84,11 @@
             margin-bottom: 0.5rem;
         }
         .course-title {
-            font-size: 1.3rem;
-            font-weight: 700;
+            font-size: 1rem;
+            font-weight: 500;
             letter-spacing: 1px;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
+            color: #E8A735;
         }
         .graduate-name {
             font-size: 2.5rem;
@@ -99,8 +100,14 @@
         .achievement-text {
             font-size: 0.9rem;
             opacity: 0.9;
-            margin: 1rem 0;
+            margin: 0.5rem 0;
             line-height: 1.4;
+        }
+        .program-title {
+            font-size: 1rem;
+            font-weight: 500;
+            opacity: 0.9;
+            margin-top: 0.25rem;
         }
         .date-text {
             font-size: 0.8rem;
@@ -173,7 +180,10 @@
                 font-size: 1.8rem;
             }
             .course-title {
-                font-size: 1rem;
+                font-size: 0.85rem;
+            }
+            .program-title {
+                font-size: 0.85rem;
             }
             .btn-group button {
                 padding: 0.6rem 1.2rem;
@@ -208,19 +218,27 @@
         <div class="hv-divider"></div>
         
         <div class="badge-icon">🏅</div>
-        <div class="course-title">حزمة أدوات المرونة</div>
+        
+        <!-- اسم المستخدم -->
         <div class="graduate-name" id="graduateName">جار التحميل...</div>
-        <div class="achievement-text">
-            أكمل بنجاح برنامج<br>
-            القيادة في مناطق النزاع
-        </div>
+        
+        <!-- أكمل بنجاح برنامج -->
+        <div class="achievement-text">أكمل بنجاح برنامج</div>
+        
+        <!-- حزمة أدوات المرونة -->
+        <div class="course-title">حزمة أدوات المرونة</div>
+        
+        <!-- القيادة في مناطق النزاع -->
+        <div class="program-title">القيادة في مناطق النزاع</div>
+        
+        <!-- تاريخ الإكمال -->
         <div class="date-text" id="completionDate">تاريخ الإكمال: جار التحميل...</div>
     </div>
 
     <!-- Buttons below the card -->
     <div class="btn-group">
         <button id="shareLinkedInBtn" class="btn-linkedin">🔗 مشاركة على LinkedIn</button>
-        <button id="copyCardBtn">🖼️ نسخ البطاقة كصورة</button>
+        <button id="copyCardBtn" class="btn-copy">🖼️ نسخ البطاقة كصورة</button>
     </div>
 </div>
 
@@ -382,11 +400,11 @@ function generateCleanLinkedInPost() {
     
     return `🏅
 
-حزمة أدوات المرونة
-
 ${userName}
 
 أكمل بنجاح برنامج
+
+حزمة أدوات المرونة
 
 القيادة في مناطق النزاع
 
