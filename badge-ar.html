@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
-    <title>شهادة إتمام الكورس · حزمة أدوات المرونة</title>
+    <title>شهادة إتمام الكورس · حزمة أدوات المرونة والصمود</title>
     <style>
         * {
             margin: 0;
@@ -83,11 +83,11 @@
             font-size: 3rem;
             margin-bottom: 0.5rem;
         }
-        .course-title {
-            font-size: 1rem;
-            font-weight: 500;
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
+        .program-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
             color: #E8A735;
         }
         .graduate-name {
@@ -98,16 +98,17 @@
             word-break: break-word;
         }
         .achievement-text {
-            font-size: 0.9rem;
+            font-size: 1rem;
+            font-weight: 500;
             opacity: 0.9;
             margin: 0.5rem 0;
             line-height: 1.4;
         }
-        .program-title {
-            font-size: 1rem;
-            font-weight: 500;
-            opacity: 0.9;
-            margin-top: 0.25rem;
+        .course-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            color: #E8A735;
         }
         .date-text {
             font-size: 0.8rem;
@@ -179,11 +180,14 @@
             .graduate-name {
                 font-size: 1.8rem;
             }
-            .course-title {
-                font-size: 0.85rem;
-            }
             .program-title {
-                font-size: 0.85rem;
+                font-size: 1rem;
+            }
+            .course-title {
+                font-size: 0.95rem;
+            }
+            .achievement-text {
+                font-size: 0.9rem;
             }
             .btn-group button {
                 padding: 0.6rem 1.2rem;
@@ -217,7 +221,11 @@
         </div>
         <div class="hv-divider"></div>
         
+        <!-- 🏅 الشارة -->
         <div class="badge-icon">🏅</div>
+        
+        <!-- القيادة في مناطق النزاع -->
+        <div class="program-title">القيادة في مناطق النزاع</div>
         
         <!-- اسم المستخدم -->
         <div class="graduate-name" id="graduateName">جار التحميل...</div>
@@ -225,11 +233,8 @@
         <!-- أكمل بنجاح برنامج -->
         <div class="achievement-text">أكمل بنجاح برنامج</div>
         
-        <!-- حزمة أدوات المرونة -->
-        <div class="course-title">حزمة أدوات المرونة</div>
-        
-        <!-- القيادة في مناطق النزاع -->
-        <div class="program-title">القيادة في مناطق النزاع</div>
+        <!-- حزمة أدوات المرونة والصمود -->
+        <div class="course-title">حزمة أدوات المرونة والصمود</div>
         
         <!-- تاريخ الإكمال -->
         <div class="date-text" id="completionDate">تاريخ الإكمال: جار التحميل...</div>
@@ -400,13 +405,13 @@ function generateCleanLinkedInPost() {
     
     return `🏅
 
+القيادة في مناطق النزاع
+
 ${userName}
 
 أكمل بنجاح برنامج
 
-حزمة أدوات المرونة
-
-القيادة في مناطق النزاع
+حزمة أدوات المرونة والصمود
 
 تاريخ الإكمال: ${dateString}`;
 }
