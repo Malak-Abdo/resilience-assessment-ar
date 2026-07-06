@@ -479,10 +479,12 @@ function savePreviousAnswers() {
 function getChangesCount(questionId, currentValue) {
     const prevValue = previousAnswers[questionId];
     
+    // If no previous answer, return 0 (first time)
     if (prevValue === null || prevValue === undefined || prevValue === '') {
         return 0;
     }
     
+    // Compare strings for text answers
     if (String(prevValue) !== String(currentValue)) {
         return 1;
     }
@@ -502,6 +504,7 @@ function updatePreviousAnswers() {
 function sendPostAssessmentData(action) {
     const user = getUserData();
     
+    // ✅ Calculate changes by comparing with previous answers
     const q1Changes = getChangesCount(1, answers[1]);
     const q2Changes = getChangesCount(2, answers[2]);
     const q3Changes = getChangesCount(3, answers[3]);
@@ -509,6 +512,7 @@ function sendPostAssessmentData(action) {
     const q5Changes = getChangesCount(5, answers[5]);
     const q6Changes = getChangesCount(6, answers[6]);
     
+    // ✅ Build history with changes
     const history = {
         q1_history: answers[1] ? answers[1].toString() : '',
         q1_changes: q1Changes,
@@ -524,6 +528,7 @@ function sendPostAssessmentData(action) {
         q6_changes: q6Changes
     };
     
+    // ✅ Calculate total changes (sum of all individual changes)
     totalChanges = q1Changes + q2Changes + q3Changes + q4Changes + q5Changes + q6Changes;
     
     const completionScore = calculateCompletionScore();
@@ -655,18 +660,18 @@ function renderQuestion() {
     
     if (q.type === 'scale') {
         document.querySelectorAll('.scale-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const val = parseInt(item.getAttribute('data-value'));
+            item.addEventListener('click', function() {
+                const val = parseInt(this.getAttribute('data-value'));
                 document.querySelectorAll('.scale-item').forEach(i => i.classList.remove('selected'));
-                item.classList.add('selected');
+                this.classList.add('selected');
                 answers[currentIndex+1] = val;
                 updateProgress();
             });
         });
     } else if (q.type === 'text') {
         const textarea = document.getElementById('textAnswer');
-        textarea.addEventListener('input', () => {
-            answers[currentIndex+1] = textarea.value;
+        textarea.addEventListener('input', function() {
+            answers[currentIndex+1] = this.value;
             updateProgress();
         });
     }
@@ -720,7 +725,7 @@ function handleNext() {
         return;
     }
     
-    // ✅ Update previous answers before sending
+    // ✅ Update previous answers before sending (this tracks changes)
     updatePreviousAnswers();
     
     if (currentIndex < assessmentQuestions.length - 1) {
