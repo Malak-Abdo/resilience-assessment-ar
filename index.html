@@ -244,6 +244,7 @@
             margin-top: 1rem;
         }
         
+        /* Modal styles */
         .name-modal {
             position: fixed;
             top: 0;
@@ -364,26 +365,9 @@
 
 <script>
 // ============================================
-// LANGUAGE SUFFIX FOR LOCALSTORAGE
-// ============================================
-const storageSuffix = '_ar';
-
-// ============================================
 // GOOGLE SHEETS WEB APP URL
 // ============================================
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxVZprpnnFDCZ1kK-lkEH1zhy0l4AV1i_OeibfIXehm55TTRLttea1yI9GU21Zp3WJyfw/exec';
-
-// ============================================
-// QUESTION TEXT CONSTANTS - For column headers
-// ============================================
-const QUESTION_TEXTS = {
-    1: "الثقة في استخدام S.A.F.E. في أزمة مستقبلية؟ (1-5)",
-    2: "هل سيتغير رد فعلك الأول تجاه الأزمات؟ (1-5)",
-    3: "الثقة في قيادة الفريق خلال أزمة؟ (1-5)",
-    4: "أكثر شيء قيم تعلمته",
-    5: "احتمالية استخدام أداة من الدورة في 30 يوماً؟ (1-5)",
-    6: "تقييم الدورة بشكل عام (1-5)"
-};
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz50ZDvr2jPBWa3BiQXMra0zye7sbvOI6X26O9hMrI8qWHBhSLoJXfO9_tfGqXDpXgSTA/exec';
 
 // ============================================
 // MODAL AND USER DATA HANDLING
@@ -414,6 +398,7 @@ function updateUserBadge(name) {
     }
 }
 
+// Setup modal button - THIS IS THE KEY FUNCTION
 function setupModalButton() {
     const startBtn = document.getElementById('startAssessmentBtn');
     if (startBtn) {
@@ -431,6 +416,7 @@ function setupModalButton() {
             updateUserBadge(name);
             hideModal();
             
+            // Start the assessment
             renderQuestion();
             updateProgress();
         });
@@ -446,6 +432,8 @@ function getUserData() {
     };
 }
 
+const currentUser = getUserData();
+
 function showToast(message, isError = false) {
     const existing = document.querySelector('.toast-message');
     if (existing) existing.remove();
@@ -456,145 +444,51 @@ function showToast(message, isError = false) {
     setTimeout(() => toast.remove(), 3000);
 }
 
-// ============================================
-// TRACK ANSWER CHANGES - Store previous answers
-// ============================================
-let previousAnswers = { 1: null, 2: null, 3: null, 4: null, 5: null, 6: null };
-let totalChanges = 0;
-
-function loadPreviousAnswers() {
-    const saved = localStorage.getItem('post_assessment_previous_answers' + storageSuffix);
-    if (saved) {
-        try {
-            previousAnswers = JSON.parse(saved);
-        } catch(e) {}
-    }
-}
-
-function savePreviousAnswers() {
-    localStorage.setItem('post_assessment_previous_answers' + storageSuffix, JSON.stringify(previousAnswers));
-}
-
-function getChangesCount(questionId, currentValue) {
-    const prevValue = previousAnswers[questionId];
-    
-    if (prevValue === null || prevValue === undefined || prevValue === '') {
-        return 0;
-    }
-    
-    if (String(prevValue) !== String(currentValue)) {
-        return 1;
-    }
-    return 0;
-}
-
-function updatePreviousAnswers() {
-    for (let i = 1; i <= 6; i++) {
-        previousAnswers[i] = answers[i];
-    }
-    savePreviousAnswers();
-}
-
-// ============================================
-// SEND DATA - Called on every Next click
-// ============================================
-function sendPostAssessmentData(action) {
+async function sendToGoogleSheet(answersData) {
     const user = getUserData();
     
-    const q1Changes = getChangesCount(1, answers[1]);
-    const q2Changes = getChangesCount(2, answers[2]);
-    const q3Changes = getChangesCount(3, answers[3]);
-    const q4Changes = getChangesCount(4, answers[4]);
-    const q5Changes = getChangesCount(5, answers[5]);
-    const q6Changes = getChangesCount(6, answers[6]);
-    
-    const history = {
-        q1_history: answers[1] ? answers[1].toString() : '',
-        q1_changes: q1Changes,
-        q2_history: answers[2] ? answers[2].toString() : '',
-        q2_changes: q2Changes,
-        q3_history: answers[3] ? answers[3].toString() : '',
-        q3_changes: q3Changes,
-        q4_history: answers[4] ? answers[4].toString() : '',
-        q4_changes: q4Changes,
-        q5_history: answers[5] ? answers[5].toString() : '',
-        q5_changes: q5Changes,
-        q6_history: answers[6] ? answers[6].toString() : '',
-        q6_changes: q6Changes
-    };
-    
-    totalChanges = q1Changes + q2Changes + q3Changes + q4Changes + q5Changes + q6Changes;
-    
-    const completionScore = calculateCompletionScore();
-    
-    const payload = {
+    var payload = {
         module: 'Post Assessment',
-        action: action,
+        action: 'completed',
         language: 'ar',
         userName: user.name,
         userEmail: user.email,
         userPosition: user.position,
         timestamp: new Date().toISOString(),
-        answers: {
-            q1_confidence_safe: answers[1] || '',
-            q2_reaction_change: answers[2] || '',
-            q3_confidence_team: answers[3] || '',
-            q4_most_valuable: answers[4] || '',
-            q5_likelihood_use: answers[5] || '',
-            q6_overall_rating: answers[6] || '',
-            completionScore: completionScore
-        },
-        questionTexts: {
-            q1_text: QUESTION_TEXTS[1],
-            q2_text: QUESTION_TEXTS[2],
-            q3_text: QUESTION_TEXTS[3],
-            q4_text: QUESTION_TEXTS[4],
-            q5_text: QUESTION_TEXTS[5],
-            q6_text: QUESTION_TEXTS[6]
-        },
-        history: history,
-        totalChanges: totalChanges,
-        isComplete: (action === 'completed')
+        answers: answersData
     };
     
-    console.log('📤 جاري إرسال بيانات التقييم (الإجراء: ' + action + '):', payload);
+    console.log('📤 جاري إرسال البيانات:', payload);
     
-    fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('✅ تم إرسال البيانات بنجاح:', data);
-        if (action === 'completed') {
-            showToast('✅ تم إكمال التقييم! تم حفظ نتائجك.');
-        } else {
-            showToast('💾 تم حفظ التقدم');
-        }
-    })
-    .catch(error => {
-        console.warn('⚠️ خطأ في الإرسال:', error);
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', GOOGLE_SCRIPT_URL, true);
-        xhr.setRequestHeader('Content-Type', 'text/plain;charset=utf-8');
-        xhr.send(JSON.stringify(payload));
-    });
+    try {
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'text/plain;charset=utf-8',
+            },
+            body: JSON.stringify(payload)
+        });
+        
+        const result = await response.json();
+        console.log('✅ الرد:', result);
+        return result.success === true;
+    } catch (error) {
+        console.log('⚠️ خطأ:', error);
+        return true;
+    }
 }
 
 const assessmentQuestions = [
     { id: 1, text: "هل تشعر بالثقة في قدرتك على استخدام إطار S.A.F.E. في أزمة مستقبلية؟", type: "scale", min: 1, max: 5, labels: ["غير واثق", "واثق قليلاً", "واثق معتدل", "واثق", "واثق جداً"] },
     { id: 2, text: "هل تعتقد أن رد فعلك الأول تجاه الأزمات سيتغير بعد هذه الدورة؟", type: "scale", min: 1, max: 5, labels: ["لا أوافق بشدة", "لا أوافق", "محايد", "أوافق", "أوافق بشدة"] },
-    { id: 3, text: "مقارنة بما قبل الدورة، ما مدى ثقتك في قيادة فريقك خلال أزمة غير متوقعة؟", type: "scale", min: 1, max: 5, labels: ["أقل ثقة بكثير", "أقل ثقة قليلاً", "لا تغيير", "أكثر ثقة قليلاً", "أكثر ثقة بكثير"] },
-    { id: 4, text: "ما هو أكثر شيء قيم تعلمته من هذه الدورة؟", type: "text", placeholder: "مثال: إطار S.A.F.E. سيساعدني على التوقف قبل الرد..." },
-    { id: 5, text: "ما مدى احتمالية استخدامك لأداة واحدة على الأقل من هذه الدورة في الثلاثين يوماً القادمة؟", type: "scale", min: 1, max: 5, labels: ["غير محتمل", "غير محتمل", "محايد", "محتمل", "محتمل جداً"] },
+    { id: 3, text: "مقارنة بما قبل الدورة، ما مدى ثقتك في قيادة فريقك خلال أزمة؟", type: "scale", min: 1, max: 5, labels: ["أقل ثقة بكثير", "أقل ثقة قليلاً", "لا تغيير", "أكثر ثقة قليلاً", "أكثر ثقة بكثير"] },
+    { id: 4, text: "ما هو أكثر شيء قيم تعلمته من هذه الدورة؟", type: "text", placeholder: "مثال: إطار S.A.F.E. سيساعدني..." },
+    { id: 5, text: "ما مدى احتمالية استخدامك لأداة من هذه الدورة في الثلاثين يوماً القادمة؟", type: "scale", min: 1, max: 5, labels: ["غير محتمل", "غير محتمل", "محايد", "محتمل", "محتمل جداً"] },
     { id: 6, text: "بشكل عام، كيف تقيم هذه الدورة؟", type: "scale", min: 1, max: 5, labels: ["ضعيفة", "مقبولة", "جيدة", "جيدة جداً", "ممتازة"] }
 ];
 
 let answers = {};
 let currentIndex = 0;
-let assessmentCompleted = false;
-let hasSentCompleted = false;
 
 for (let i = 1; i <= assessmentQuestions.length; i++) {
     const q = assessmentQuestions[i-1];
@@ -688,7 +582,7 @@ function showResults() {
     const completionScore = calculateCompletionScore();
     const userName = getUserData().name;
     
-    let resultsHtml = `<div class="results-box"><div class="congrats-message"><h3>🎉 شكراً لك، ${userName}! 🎉</h3><p>لقد أكملت بنجاح تقييم ما بعد الدورة.</p></div><div class="tools-list"><h4>🧰 حزمة أدوات المرونة جاهزة</h4><ul><li><strong>🔍 إطار S.A.F.E.</strong> — توقف وتنفس، تقييم الواقع، إيجاد أصغر إجراء، تنفيذ وتقييم</li><li><strong>🔄 تحويل العقلية</strong> — من ضحية إلى فاعل، من الندرة إلى الوفرة</li><li><strong>🎯 نوايا التعلم</strong></li><li><strong>⚙️ العادات التنفيذية</strong></li><li><strong>⏰ بروتوكول السابعة صباحاً</strong></li></ul></div><div><strong>✅ اكتمل التقييم:</strong> ${completionScore}%</div>`;
+    let resultsHtml = `<div class="results-box"><div class="congrats-message"><h3>🎉 شكراً لك، ${userName}! 🎉</h3><p>لقد أكملت بنجاح تقييم ما بعد الدورة.</p></div><div class="tools-list"><h4>🧰 حزمة أدوات المرونة جاهزة</h4><ul><li><strong>🔍 إطار S.A.F.E.</strong> — توقف وتنفس، تقييم الواقع، إيجاد أصغر إجراء</li><li><strong>🔄 تحويل العقلية</strong> — من ضحية إلى فاعل</li><li><strong>🎯 نوايا التعلم</strong></li><li><strong>⚙️ العادات التنفيذية</strong></li><li><strong>⏰ بروتوكول السابعة صباحاً</strong></li></ul></div><div><strong>✅ اكتمل التقييم:</strong> ${completionScore}%</div>`;
     
     if (answers[4] && answers[4].trim()) {
         resultsHtml += `<div><strong>💡 أكثر شيء قيم تعلمته:</strong><br>"${answers[4]}"</div>`;
@@ -700,56 +594,6 @@ function showResults() {
     prevBtn.classList.add('hidden');
     nextBtn.classList.add('hidden');
     sendSection.classList.remove('hidden');
-}
-
-// ============================================
-// HANDLE NEXT - Sends data on every Next click
-// ============================================
-function handleNext() {
-    const currentQ = assessmentQuestions[currentIndex];
-    let currentAnswered = false;
-    if (currentQ.type === 'text') {
-        currentAnswered = (answers[currentIndex+1] && answers[currentIndex+1].trim() !== '');
-    } else {
-        currentAnswered = (answers[currentIndex+1] !== null && answers[currentIndex+1] !== '');
-    }
-    
-    if (!currentAnswered) {
-        showToast('⚠️ الرجاء الإجابة على السؤال الحالي.', true);
-        return;
-    }
-    
-    // ✅ Update previous answers before sending
-    updatePreviousAnswers();
-    
-    if (currentIndex < assessmentQuestions.length - 1) {
-        // Not last question - send as 'partial' (In Progress)
-        sendPostAssessmentData('partial');
-        currentIndex++;
-        renderQuestion();
-        prevBtn.disabled = false;
-        updateProgress();
-    } else {
-        // ✅ Last question - send as 'completed' ONLY ONCE
-        if (!hasSentCompleted) {
-            hasSentCompleted = true;
-            // ✅ Send completed data
-            sendPostAssessmentData('completed');
-            // ✅ Store in localStorage
-            localStorage.setItem('post_assessment_completed' + storageSuffix, 'true');
-        }
-        // ✅ Show results AFTER sending data
-        showResults();
-    }
-}
-
-function handlePrev() {
-    if (currentIndex > 0) {
-        currentIndex--;
-        renderQuestion();
-        if (currentIndex === 0) prevBtn.disabled = true;
-        updateProgress();
-    }
 }
 
 async function sendResults() {
@@ -767,7 +611,7 @@ async function sendResults() {
     }
     
     if (!allAnswered) {
-        showToast('⚠️ الرجاء الإجابة على جميع الأسئلة قبل الإرسال.', true);
+        showToast('⚠️ الرجاء الإجابة على جميع الأسئلة.', true);
         return;
     }
     
@@ -775,18 +619,52 @@ async function sendResults() {
     sendBtn.innerText = '🎓 جاري الحفظ...';
     feedbackDiv.innerHTML = '⏳ جاري الإرسال...';
     
-    // ✅ Send final completed data one more time to ensure it's saved
-    if (!hasSentCompleted) {
-        hasSentCompleted = true;
-        sendPostAssessmentData('completed');
+    const completionScore = calculateCompletionScore();
+    const answersData = {
+        q1_confidence_safe: answers[1] || '',
+        q2_reaction_change: answers[2] || '',
+        q3_confidence_team: answers[3] || '',
+        q4_most_valuable: answers[4] || '',
+        q5_likelihood_use: answers[5] || '',
+        q6_overall_rating: answers[6] || '',
+        completionScore: completionScore
+    };
+    
+    await sendToGoogleSheet(answersData);
+    localStorage.setItem('post_assessment_completed', 'true');
+    localStorage.setItem('course_completed', 'true');
+    window.location.href = 'badge-ar.html';
+}
+
+function handleNext() {
+    const currentQ = assessmentQuestions[currentIndex];
+    let currentAnswered = false;
+    if (currentQ.type === 'text') {
+        currentAnswered = (answers[currentIndex+1] && answers[currentIndex+1].trim() !== '');
+    } else {
+        currentAnswered = (answers[currentIndex+1] !== null && answers[currentIndex+1] !== '');
     }
     
-    localStorage.setItem('post_assessment_completed' + storageSuffix, 'true');
-    localStorage.setItem('course_completed', 'true');
+    if (!currentAnswered) {
+        showToast('⚠️ الرجاء الإجابة على السؤال الحالي.', true);
+        return;
+    }
     
-    setTimeout(() => {
-        window.location.href = 'badge-ar.html';
-    }, 1500);
+    if (currentIndex < assessmentQuestions.length - 1) {
+        currentIndex++;
+        renderQuestion();
+        prevBtn.disabled = false;
+    } else {
+        showResults();
+    }
+}
+
+function handlePrev() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        renderQuestion();
+        if (currentIndex === 0) prevBtn.disabled = true;
+    }
 }
 
 // Initialize page
@@ -794,36 +672,11 @@ document.getElementById('sendResultsBtn')?.addEventListener('click', sendResults
 prevBtn.addEventListener('click', handlePrev);
 nextBtn.addEventListener('click', handleNext);
 
-// Load previous answers and check if already completed
-function init() {
-    const user = getUserData();
-    if (user.name && user.name !== 'متعلم') {
-        updateUserBadge(user.name);
-        hideModal();
-    }
-    
-    loadPreviousAnswers();
-    
-    // ✅ Check if already completed
-    if (localStorage.getItem('post_assessment_completed' + storageSuffix) === 'true') {
-        // ✅ Mark as completed so it doesn't send again
-        hasSentCompleted = true;
-        showResults();
-        const sendBtn = document.getElementById('sendResultsBtn');
-        if (sendBtn) {
-            sendBtn.innerText = '✅ تم الإكمال مسبقاً';
-            sendBtn.disabled = true;
-        }
-        return;
-    }
-    
-    renderQuestion();
-    updateProgress();
-    prevBtn.disabled = true;
-}
-
+// Setup modal button
 setupModalButton();
-init();
+
+// NOTE: The modal is always shown at start - we do NOT auto-hide it
+// The user MUST enter their name and email before seeing the assessment
 </script>
 </body>
 </html>
