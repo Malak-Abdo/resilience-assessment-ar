@@ -504,7 +504,6 @@ function updatePreviousAnswers() {
 function sendPostAssessmentData(action) {
     const user = getUserData();
     
-    // ✅ Calculate changes by comparing with previous answers
     const q1Changes = getChangesCount(1, answers[1]);
     const q2Changes = getChangesCount(2, answers[2]);
     const q3Changes = getChangesCount(3, answers[3]);
@@ -512,7 +511,6 @@ function sendPostAssessmentData(action) {
     const q5Changes = getChangesCount(5, answers[5]);
     const q6Changes = getChangesCount(6, answers[6]);
     
-    // ✅ Build history with changes
     const history = {
         q1_history: answers[1] ? answers[1].toString() : '',
         q1_changes: q1Changes,
@@ -528,12 +526,11 @@ function sendPostAssessmentData(action) {
         q6_changes: q6Changes
     };
     
-    // ✅ Calculate total changes (sum of all individual changes)
     totalChanges = q1Changes + q2Changes + q3Changes + q4Changes + q5Changes + q6Changes;
     
     const completionScore = calculateCompletionScore();
     
-    // ✅ IMPORTANT: Sending status AND totalChanges like English version
+    // ✅ التغيير هنا - أضف status قبل totalChanges
     const payload = {
         module: 'Post Assessment',
         action: action,
@@ -560,8 +557,8 @@ function sendPostAssessmentData(action) {
             q6_text: QUESTION_TEXTS[6]
         },
         history: history,
-        status: (action === 'completed') ? 'Completed' : 'In Progress',  // ✅ Status
-        totalChanges: totalChanges,  // ✅ Total Changes
+        status: (action === 'completed') ? 'Completed' : 'In Progress',  // ✅ هذا هو المطلوب
+        totalChanges: totalChanges,
         isComplete: (action === 'completed')
     };
     
