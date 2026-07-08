@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -237,7 +237,7 @@
         }
         .badge-btn {
             background: linear-gradient(135deg, #E8A735 0%, #D4951E 100%);
-            color: white !important;
+            color: #2E3A2A;
             font-weight: 700;
             font-size: 1rem;
             padding: 0.8rem 1.8rem;
@@ -533,36 +533,38 @@ function sendPostAssessmentData(action) {
     
     const completionScore = calculateCompletionScore();
     
-   const payload = {
-    module: 'Post Assessment',
-    action: action,
-    language: 'ar',
-    userName: user.name,
-    userEmail: user.email,
-    userPosition: user.position,
-    timestamp: new Date().toISOString(),
-    answers: {
-        q1_confidence_safe: answers[1] || '',
-        q2_reaction_change: answers[2] || '',
-        q3_confidence_team: answers[3] || '',
-        q4_most_valuable: answers[4] || '',
-        q5_likelihood_use: answers[5] || '',
-        q6_overall_rating: answers[6] || '',
-        completionScore: completionScore
-    },
-    questionTexts: {
-        q1_text: QUESTION_TEXTS[1],
-        q2_text: QUESTION_TEXTS[2],
-        q3_text: QUESTION_TEXTS[3],
-        q4_text: QUESTION_TEXTS[4],
-        q5_text: QUESTION_TEXTS[5],
-        q6_text: QUESTION_TEXTS[6]
-    },
-    history: history,
-    status: (action === 'completed') ? 'Completed' : 'In Progress',  // ← Status أولاً
-    totalChanges: totalChanges,  // ← Total Changes ثانياً
-    isComplete: (action === 'completed')
-};
+    // ✅ IMPORTANT: Sending status AND totalChanges like English version
+    const payload = {
+        module: 'Post Assessment',
+        action: action,
+        language: 'ar',
+        userName: user.name,
+        userEmail: user.email,
+        userPosition: user.position,
+        timestamp: new Date().toISOString(),
+        answers: {
+            q1_confidence_safe: answers[1] || '',
+            q2_reaction_change: answers[2] || '',
+            q3_confidence_team: answers[3] || '',
+            q4_most_valuable: answers[4] || '',
+            q5_likelihood_use: answers[5] || '',
+            q6_overall_rating: answers[6] || '',
+            completionScore: completionScore
+        },
+        questionTexts: {
+            q1_text: QUESTION_TEXTS[1],
+            q2_text: QUESTION_TEXTS[2],
+            q3_text: QUESTION_TEXTS[3],
+            q4_text: QUESTION_TEXTS[4],
+            q5_text: QUESTION_TEXTS[5],
+            q6_text: QUESTION_TEXTS[6]
+        },
+        history: history,
+        status: (action === 'completed') ? 'Completed' : 'In Progress',  // ✅ Status
+        totalChanges: totalChanges,  // ✅ Total Changes
+        isComplete: (action === 'completed')
+    };
+    
     console.log('📤 جاري إرسال بيانات التقييم (الإجراء: ' + action + '):', payload);
     
     fetch(GOOGLE_SCRIPT_URL, {
