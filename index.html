@@ -534,35 +534,35 @@ function sendPostAssessmentData(action) {
     const completionScore = calculateCompletionScore();
     
     const payload = {
-        module: 'Post Assessment',
-        action: action,
-        language: 'ar',
-        userName: user.name,
-        userEmail: user.email,
-        userPosition: user.position,
-        timestamp: new Date().toISOString(),
-        answers: {
-            q1_confidence_safe: answers[1] || '',
-            q2_reaction_change: answers[2] || '',
-            q3_confidence_team: answers[3] || '',
-            q4_most_valuable: answers[4] || '',
-            q5_likelihood_use: answers[5] || '',
-            q6_overall_rating: answers[6] || '',
-            completionScore: completionScore
-        },
-        questionTexts: {
-            q1_text: QUESTION_TEXTS[1],
-            q2_text: QUESTION_TEXTS[2],
-            q3_text: QUESTION_TEXTS[3],
-            q4_text: QUESTION_TEXTS[4],
-            q5_text: QUESTION_TEXTS[5],
-            q6_text: QUESTION_TEXTS[6]
-        },
-        history: history,
-        totalChanges: totalChanges,
-        isComplete: (action === 'completed')
-    };
-    
+    module: 'Post Assessment',
+    action: action,
+    language: 'ar',
+    userName: user.name,
+    userEmail: user.email,
+    userPosition: user.position,
+    timestamp: new Date().toISOString(),
+    answers: {
+        q1_confidence_safe: answers[1] || '',
+        q2_reaction_change: answers[2] || '',
+        q3_confidence_team: answers[3] || '',
+        q4_most_valuable: answers[4] || '',
+        q5_likelihood_use: answers[5] || '',
+        q6_overall_rating: answers[6] || '',
+        completionScore: completionScore
+    },
+    questionTexts: {
+        q1_text: QUESTION_TEXTS[1],
+        q2_text: QUESTION_TEXTS[2],
+        q3_text: QUESTION_TEXTS[3],
+        q4_text: QUESTION_TEXTS[4],
+        q5_text: QUESTION_TEXTS[5],
+        q6_text: QUESTION_TEXTS[6]
+    },
+    history: history,
+    status: (action === 'completed') ? 'Completed' : 'In Progress',  // ← Status أولاً
+    totalChanges: totalChanges,  // ← Total Changes ثانياً
+    isComplete: (action === 'completed')
+};
     console.log('📤 جاري إرسال بيانات التقييم (الإجراء: ' + action + '):', payload);
     
     fetch(GOOGLE_SCRIPT_URL, {
